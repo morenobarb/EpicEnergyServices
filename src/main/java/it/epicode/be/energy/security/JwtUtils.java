@@ -27,16 +27,6 @@ public class JwtUtils {
 	private Long jwtExpirationMs;
 
 	
-	/**
-	 * Genera un token JWT impostando
-	 * - data di creazione
-	 * - data di scadenza
-	 * - username utente loggato
-	 * e lo firma con la chiave segreta e l'algoritmo HS512
-	 * 
-	 * @param authentication informazioni relative all'utente
-	 * @return stringa corrispondente al token
-	 */
 	public String generateJwtToken(Authentication authentication) {
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 		Date now = new Date();
@@ -45,22 +35,12 @@ public class JwtUtils {
 				.signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
 	}
 
-	/**
-	 * Estrae lo username dal token 
-	 * 
-	 * @param token JWT
-	 * @return username 
-	 */
+
 	public String getUsernameFromJwtToken(String token) {
 		return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
 	}
 
-	/**
-	 * Effettua la validazione del token 
-	 * 
-	 * @param authToken toke JWT
-	 * @return true se il token è valido, false altrimenti
-	 */
+	// Effettua la validazione del token 
 	public boolean validateJwtToken(String authToken) {
 		try {
 			Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
